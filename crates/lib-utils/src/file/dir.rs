@@ -32,6 +32,8 @@ pub async fn check_and_init_dir() -> Result<()> {
                 return anyhow!("创建文档文件夹失败");
             })?;
         }
+    }else {
+        info!("初始文件夹已存在");
     }
     Ok(())
 }
