@@ -2,12 +2,7 @@ use anyhow::{anyhow, Result};
 use std::path::Path;
 use tokio::fs::{create_dir, metadata};
 use tracing::{error, info};
-
-const INIT_DIR: &'static str = "/Users/lishaowen/file-manage";
-const VIDEO_DIR: &'static str = "/Users/lishaowen/file-manage/video";
-const AUDIO_DIR: &'static str = "/Users/lishaowen/file-manage/audio";
-const IMAGE_DIR: &'static str = "/Users/lishaowen/file-manage/image";
-const DOC_DIR: &'static str = "/Users/lishaowen/file-manage/doc";
+use crate::file::{AUDIO_DIR, DOC_DIR, IMAGE_DIR, INIT_DIR, VIDEO_DIR};
 
 pub async fn check_and_init_dir() -> Result<()> {
     //获取初始文件夹路径
