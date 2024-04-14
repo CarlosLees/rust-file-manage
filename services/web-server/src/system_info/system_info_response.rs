@@ -1,7 +1,7 @@
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize,Deserialize,Debug,Default,Builder)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder)]
 #[builder(setter(into))]
 #[serde(rename_all = "camelCase")]
 pub struct SystemInfoResponse {
@@ -12,10 +12,10 @@ pub struct SystemInfoResponse {
     pub platform: String,
     pub distro: String,
     pub desktop_env: String,
-    pub arch: String
+    pub arch: String,
 }
 
-#[derive(Serialize,Deserialize,Default,Debug,Builder)]
+#[derive(Serialize, Deserialize, Default, Debug, Builder)]
 #[serde(rename_all = "camelCase")]
 #[builder(setter(into))]
 pub struct SysInfoResponse {
@@ -28,10 +28,10 @@ pub struct SysInfoResponse {
     pub system_name: Option<String>,
     pub cpu_length: usize,
     pub disks: Vec<DiskInfo>,
-    pub temperatures: Vec<Temperature>
+    pub temperatures: Vec<Temperature>,
 }
 
-#[derive(Serialize,Deserialize,Default,Debug,Builder,Clone)]
+#[derive(Serialize, Deserialize, Default, Debug, Builder, Clone)]
 #[serde(rename_all = "camelCase")]
 #[builder(setter(into))]
 pub struct DiskInfo {
@@ -49,11 +49,11 @@ pub struct DiskInfo {
     pub mount_point: String,
 }
 
-#[derive(Serialize,Deserialize,Default,Debug,Builder,Clone)]
+#[derive(Serialize, Deserialize, Default, Debug, Builder, Clone)]
 #[serde(rename_all = "camelCase")]
 #[builder(setter(into))]
 pub struct Temperature {
     pub temperature: f32,
     pub max_temperature: f32,
-    pub label: String
+    pub label: String,
 }

@@ -1,8 +1,11 @@
+use crate::system_info::system_info_response::{
+    DiskInfoBuilder, SysInfoResponse, SysInfoResponseBuilder, SystemInfoResponse,
+    SystemInfoResponseBuilder, TemperatureBuilder,
+};
 use axum::Json;
+use lib_utils::result::http_result::HttpResult;
 use sysinfo::{Components, Disks, System};
 use whoami::fallible;
-use lib_utils::result::http_result::HttpResult;
-use crate::system_info::system_info_response::{DiskInfoBuilder, SysInfoResponse, SysInfoResponseBuilder, SystemInfoResponse, SystemInfoResponseBuilder, TemperatureBuilder};
 
 pub async fn system_info() -> Json<HttpResult<SystemInfoResponse>> {
     let response = SystemInfoResponseBuilder::default()
@@ -14,7 +17,8 @@ pub async fn system_info() -> Json<HttpResult<SystemInfoResponse>> {
         .distro(whoami::distro())
         .arch(whoami::arch().to_string())
         .desktop_env(whoami::desktop_env().to_string())
-        .build().unwrap();
+        .build()
+        .unwrap();
 
     Json(HttpResult::ok(response))
 }
@@ -33,7 +37,8 @@ pub async fn sys_info() -> Json<HttpResult<SysInfoResponse>> {
             .file_system(disk.file_system().to_str().unwrap().to_string())
             .kind(disk.kind().to_string())
             .mount_point(disk.mount_point().to_string_lossy())
-            .build().unwrap();
+            .build()
+            .unwrap();
         disk_vec.push(disk_info);
     }
 
@@ -45,7 +50,9 @@ pub async fn sys_info() -> Json<HttpResult<SysInfoResponse>> {
         let temperature = TemperatureBuilder::default()
             .temperature(component.temperature())
             .max_temperature(component.max())
-            .label(component.label()).build().unwrap();
+            .label(component.label())
+            .build()
+            .unwrap();
         temperature_vec.push(temperature);
     }
 
@@ -58,13 +65,13 @@ pub async fn sys_info() -> Json<HttpResult<SysInfoResponse>> {
         .cpu_length(sys.cpus().len())
         .disks(disk_vec)
         .temperatures(temperature_vec)
-        .build().unwrap();
+        .build()
+        .unwrap();
 
-// Display processes ID, name na disk usage:
-//     for (pid, process) in sys.processes() {
-//         println!("[{pid}] {} {:?}", process.name(), process.disk_usage());
-//     }
-
+    // Display processes ID, name na disk usage:
+    //     for (pid, process) in sys.processes() {
+    //         println!("[{pid}] {} {:?}", process.name(), process.disk_usage());
+    //     }
 
     Json(HttpResult::ok(response))
 }
