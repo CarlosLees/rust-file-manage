@@ -5,5 +5,7 @@ members = [
     "crates/lib-core",
     "crates/lib-rpc",
     "crates/lib-utils",
-    "services/web-server"
+    "crates/lib-entity",
+    "services/web-server",
+    "migration"
 ]
