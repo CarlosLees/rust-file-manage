@@ -9,6 +9,8 @@ lib-auth = { path = "../../crates/lib-auth" }
 lib-core = { path = "../../crates/lib-core" }
 lib-rpc = { path = "../../crates/lib-rpc" }
 lib-utils = { path = "../../crates/lib-utils" }
+lib-entity = { path = "../../crates/lib-entity" }
+migration = { path = "../../migration" }
 # -- Async
 tokio = { version = "1", features = ["full"] }
 tokio-util = { version = "0.7.10", features = ["full"] }
@@ -28,3 +30,7 @@ sysinfo = "0.30.10"
 
 # -- builder
 derive_builder = "0.20.0"
+dotenv = "0.15.0"
+
+# -- orm
+sea-orm = { version = "0.12.15", features = ["sqlx-mysql","runtime-tokio-rustls"] }
