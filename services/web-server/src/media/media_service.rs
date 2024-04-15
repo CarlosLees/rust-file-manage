@@ -1,5 +1,6 @@
+use crate::AppState;
 use axum::body::Body;
-use axum::extract::Query;
+use axum::extract::{Query, State};
 use axum::http::{header, StatusCode};
 use axum::response::{IntoResponse, Response};
 use tokio::fs::{metadata, File};
@@ -7,7 +8,11 @@ use tokio_util::codec::{BytesCodec, FramedRead};
 
 use crate::media::media_params::ReadVideoParams;
 
-pub async fn read_video(Query(_params): Query<ReadVideoParams>) -> impl IntoResponse {
+pub async fn read_video(
+    Query(_params): Query<ReadVideoParams>,
+    state: State<AppState>,
+) -> impl IntoResponse {
+    println!("{:?}", state.connection);
     let file_path = "/Users/lishaowen/file-manage/video/033.mp4";
     let file = File::open(file_path).await.unwrap();
 

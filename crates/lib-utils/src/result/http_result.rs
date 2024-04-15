@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct HttpResult<T> {
     pub msg: Option<String>,
     pub code: u16,
-    pub data: Option<T>
+    pub data: Option<T>,
 }
 
 impl<T> HttpResult<T> {
@@ -12,7 +12,7 @@ impl<T> HttpResult<T> {
         Self {
             code: 200,
             msg: Some("成功".into()),
-            data: Some(data)
+            data: Some(data),
         }
     }
 
@@ -20,6 +20,16 @@ impl<T> HttpResult<T> {
         Self {
             code: 500,
             msg: Some(msg),
+            data: None,
+        }
+    }
+}
+
+impl<T> Default for HttpResult<T> {
+    fn default() -> Self {
+        HttpResult {
+            code: 200,
+            msg: Some("成功".into()),
             data: None
         }
     }

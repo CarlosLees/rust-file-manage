@@ -4,7 +4,7 @@ use axum::Router;
 
 pub fn system_info_router() -> Router {
     let router = Router::new()
-        .route("/system", get(system_info))
-        .route("/system_info", get(sys_info));
+        .route("/", get(system_info))
+        .route("/info", get(sys_info));
     router
 }

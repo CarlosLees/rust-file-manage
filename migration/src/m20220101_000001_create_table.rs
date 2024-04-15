@@ -19,10 +19,9 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(ColumnDef::new(FilePath::ParentId).integer())
-                    .col(ColumnDef::new(FilePath::Deep).integer().not_null())
                     .col(ColumnDef::new(FilePath::CreateTime).date_time().not_null())
                     .col(ColumnDef::new(FilePath::UpdateTime).date_time().not_null())
-                    .col(ColumnDef::new(FilePath::PathName).string().not_null())
+                    .col(ColumnDef::new(FilePath::FolderName).string().not_null())
                     .to_owned(),
             )
             .await
@@ -40,8 +39,7 @@ enum FilePath {
     Table,
     Id,
     ParentId,
-    Deep,
     CreateTime,
     UpdateTime,
-    PathName
+    FolderName,
 }
