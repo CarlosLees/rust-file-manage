@@ -7,7 +7,7 @@ use lib_utils::result::http_result::HttpResult;
 use sysinfo::{Components, Disks, System};
 use whoami::fallible;
 
-pub async fn system_info() -> Json<HttpResult<SystemInfoResponse>> {
+pub async fn system_device_info() -> Json<HttpResult<SystemInfoResponse>> {
     let response = SystemInfoResponseBuilder::default()
         .real_name(whoami::realname())
         .username(whoami::username())
@@ -23,7 +23,7 @@ pub async fn system_info() -> Json<HttpResult<SystemInfoResponse>> {
     Json(HttpResult::ok(response))
 }
 
-pub async fn sys_info() -> Json<HttpResult<SysInfoResponse>> {
+pub async fn system_hardware_info() -> Json<HttpResult<SysInfoResponse>> {
     let mut sys = System::new_all();
     sys.refresh_all();
 
