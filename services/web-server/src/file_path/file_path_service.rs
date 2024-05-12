@@ -5,13 +5,30 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use tokio::fs;
 
 use lib_entity::file_path;
-use lib_entity::file_path::Entity as FilePath;
+use lib_entity::file_path::{Entity as FilePath, Model};
 use lib_utils::file::VIDEO_DIR;
 use lib_utils::result::http_result::HttpResult;
 
 use crate::AppState;
 use crate::file_path::file_path_params::{CurrentPathParams, HomeFolderFromPathParam, PathType};
 use crate::file_path::file_path_response::HomeFolderFromPathResponse;
+
+// 获取首页全部文件夹
+pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Model>>> {
+    if let Ok(Some(result)) = FilePath::find().filter(file_path::Column::ParentId.is_null()).one(&state
+        .connection)
+        .await {
+        // 获取子文件夹
+
+        if let Ok(data) = FilePath::find().filter(file_path::Column::ParentId.eq(result.id))
+            .all
+        (&state.connection)
+            .await {
+            return Json(HttpResult::ok(data));
+        }
+    }
+    return Json(HttpResult::ok(vec![]))
+}
 
 pub async fn current_path_folder(Query(params):Query<CurrentPathParams>,state: State<AppState>)
     -> impl IntoResponse {

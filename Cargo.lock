@@ -1573,6 +1573,8 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "lib-utils",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

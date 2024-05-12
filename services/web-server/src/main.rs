@@ -24,7 +24,7 @@ pub(crate) struct AppState {
 
 #[tokio::main]
 async fn main() {
-    //sea-orm-cli generate entity -u mysql://root:lsw0516@82.156.175.47:3300/file_manage --with-serde both -o crates/lib-entity/src
+    //sea-orm-cli generate entity -u mysql://root:lsw0516@82.156.175.47:3300/file_manage --with-serde both --model-extra-attributes "serde(rename_all = \"camelCase\")" -o crates/lib-entity/src
 
     // 1.初始化日志
     tracing_subscriber::fmt()
@@ -62,9 +62,9 @@ async fn main() {
     let app = Router::new()
         .nest("/media", media_router)
         .nest("/path", file_path_router)
-        .layer(axum::middleware::from_fn(check_hello_world))
         .nest("/system", system_router)
-        .layer(CorsLayer::very_permissive());
+        .layer(CorsLayer::very_permissive())
+        .layer(axum::middleware::from_fn(check_hello_world));
 
     let listener = TcpListener::bind(SERVER_PORT).await.unwrap();
     axum::serve(listener, app).await.unwrap()
