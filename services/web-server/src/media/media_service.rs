@@ -9,11 +9,10 @@ use tokio_util::codec::{BytesCodec, FramedRead};
 use crate::media::media_params::ReadVideoParams;
 
 pub async fn read_video(
-    Query(_params): Query<ReadVideoParams>,
-    state: State<AppState>,
+    Query(param): Query<ReadVideoParams>,
+    _state: State<AppState>,
 ) -> impl IntoResponse {
-    println!("{:?}", state.connection);
-    let file_path = "/Users/lishaowen/file-manage/video/033.mp4";
+    let file_path = param.file_path.as_str();
     let file = File::open(file_path).await.unwrap();
 
     let len = metadata(file_path).await.unwrap().len();

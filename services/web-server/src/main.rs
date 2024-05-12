@@ -48,8 +48,6 @@ async fn main() {
     //检查文件夹初始是否存在，不存在则创建默认文件夹 Linux默认目录为 /usr/local/file-manage
     check_and_init_dir(&connection).await.unwrap();
 
-
-
     // 4.初始化web服务器
     let state = AppState { connection };
 
