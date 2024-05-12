@@ -9,3 +9,5 @@ edition = "2021"
 path = "src/lib.rs"
 
 [dependencies]
+axum = {version = "0.7", features = ["macros"]}
+lib-utils = { path = "../lib-utils" }

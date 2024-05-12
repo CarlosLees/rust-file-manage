@@ -3,9 +3,9 @@ pub mod dir;
 #[cfg(target_os = "macos")]
 const INIT_DIR: &'static str = "/Users/lishaowen/file-manage";
 #[cfg(target_os = "macos")]
-const VIDEO_DIR: &'static str = "/Users/lishaowen/file-manage/video";
+pub const VIDEO_DIR: &'static str = "/Users/lishaowen/file-manage/video";
 #[cfg(target_os = "macos")]
-const AUDIO_DIR: &'static str = "/Users/lishaowen/file-manage/audio";
+pub const AUDIO_DIR: &'static str = "/Users/lishaowen/file-manage/audio";
 #[cfg(target_os = "macos")]
 const IMAGE_DIR: &'static str = "/Users/lishaowen/file-manage/image";
 #[cfg(target_os = "macos")]

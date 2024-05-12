@@ -12,6 +12,7 @@ use sea_orm::{Database, DatabaseConnection};
 use std::env;
 use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
+use lib_core::middleware::middleware::check_hello_world;
 use crate::file_path::file_path_router::file_path_router;
 
 const SERVER_PORT: &'static str = "0.0.0.0:8888";
@@ -61,6 +62,7 @@ async fn main() {
     let app = Router::new()
         .nest("/media", media_router)
         .nest("/path", file_path_router)
+        .layer(axum::middleware::from_fn(check_hello_world))
         .nest("/system", system_router)
         .layer(CorsLayer::very_permissive());
 
