@@ -24,10 +24,29 @@ pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Mo
             .all
         (&state.connection)
             .await {
+            // 检查首页文件夹的内容
+
             return Json(HttpResult::ok(data));
         }
     }
     return Json(HttpResult::ok(vec![]))
+}
+
+//检查对应路径下的文件夹内容
+async fn check_path_file(path: String) {
+    let mut dir = fs::read_dir(path).await.unwrap();
+    while let Some(entity) = dir.next_entry().await.unwrap() {
+        let path_file_name:String = entity.path().into_os_string().to_string_lossy().to_string();
+
+        let metadata = entity.metadata().await.unwrap();
+        if metadata.is_file() {
+
+        }else if metadata.is_dir() {
+
+        }else {
+
+        }
+    }
 }
 
 pub async fn current_path_folder(Query(params):Query<CurrentPathParams>,state: State<AppState>)
