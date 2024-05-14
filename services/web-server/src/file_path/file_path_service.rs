@@ -1,7 +1,9 @@
 use axum::extract::{Query, State};
 use axum::Json;
 use axum::response::IntoResponse;
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+use chrono::Local;
+use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::ActiveValue::{Set, NotSet};
 use tokio::fs;
 
 use lib_entity::file_path;
@@ -25,7 +27,8 @@ pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Mo
         (&state.connection)
             .await {
             // 检查首页文件夹的内容
-            check_path_file(format!("{}", INIT_DIR.to_owned() + "/"), &data).await;
+            check_path_file(format!("{}", INIT_DIR.to_owned() + "/"), &data,result.id,
+                            &state.connection).await;
 
             return Json(HttpResult::ok(data));
         }
@@ -34,25 +37,47 @@ pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Mo
 }
 
 //检查对应路径下的文件夹内容
-async fn check_path_file(path: String,data: &Vec<Model>) {
+async fn check_path_file(path: String, data: &Vec<Model>, parent_id: i32, connection: &DatabaseConnection) {
     let mut dir = fs::read_dir(path).await.unwrap();
 
     let path_vec:Vec<String> = data.into_iter().map(|x| x.folder_name.clone()).collect();
 
+    let mut insert_vec = vec![];
     while let Some(entity) = dir.next_entry().await.unwrap() {
         let path_file_name:String = entity.path().into_os_string().to_string_lossy().to_string();
+        let last = path_file_name.split("/").last().unwrap();
 
-        if !path_vec.contains(&path_file_name) {
+        println!("{:?}",last);
+
+        if !path_vec.contains(&last.to_string()) {
             let metadata = entity.metadata().await.unwrap();
             if metadata.is_file() {
-
+                let file_modal = file_path::ActiveModel {
+                    id: NotSet,
+                    parent_id: Set(Some(parent_id)),
+                    create_time: Set(Local::now().naive_local()),
+                    update_time: Set(Local::now().naive_local()),
+                    folder_name: Set(last.to_owned()),
+                    file_type: Set(1)
+                };
+                insert_vec.push(file_modal);
             }else if metadata.is_dir() {
-
+                let dir_modal = file_path::ActiveModel {
+                    id: NotSet,
+                    parent_id: Set(Some(parent_id)),
+                    create_time: Set(Local::now().naive_local()),
+                    update_time: Set(Local::now().naive_local()),
+                    folder_name: Set(last.to_owned()),
+                    file_type: Set(0)
+                };
+                insert_vec.push(dir_modal);
             }else {
 
             }
         }
     }
+
+    FilePath::insert_many(insert_vec).exec(connection).await.unwrap();
 }
 
 pub async fn current_path_folder(Query(params):Query<CurrentPathParams>,state: State<AppState>)

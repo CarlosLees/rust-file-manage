@@ -42,6 +42,7 @@ pub async fn check_and_init_dir(connection: &DatabaseConnection) -> Result<()> {
             create_time: ActiveValue::Set(Local::now().naive_local()),
             update_time: ActiveValue::Set(Local::now().naive_local()),
             folder_name: ActiveValue::Set(String::from("file-manage")),
+            file_type: ActiveValue::Set(0)
         };
         if let Ok(modal) = file_path::Entity::insert(default_path).exec(connection)
             .await {
@@ -66,6 +67,7 @@ async fn insert_default_data(connection: &DatabaseConnection,folder_name: String
         create_time: ActiveValue::Set(Local::now().naive_local()),
         update_time: ActiveValue::Set(Local::now().naive_local()),
         folder_name: ActiveValue::Set(folder_name),
+        file_type: ActiveValue::Set(0)
     };
     doc.insert(connection).await?;
     Ok(())

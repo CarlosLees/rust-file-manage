@@ -13,11 +13,10 @@ pub struct Model {
     pub create_time: DateTime,
     pub update_time: DateTime,
     pub folder_name: String,
+    pub file_type: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
-impl ActiveModelBehavior for ActiveModel {
-
-}
+impl ActiveModelBehavior for ActiveModel {}
