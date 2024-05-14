@@ -22,15 +22,14 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(FilePath::CreateTime).date_time().not_null())
                     .col(ColumnDef::new(FilePath::UpdateTime).date_time().not_null())
                     .col(ColumnDef::new(FilePath::FolderName).string().not_null())
+                    .col(ColumnDef::new(FilePath::FileType).integer().not_null())
                     .to_owned(),
             )
             .await
     }
 
-    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager
-            .drop_table(Table::drop().table(FilePath::Table).to_owned())
-            .await
+    async fn down(&self, _manager: &SchemaManager) -> Result<(), DbErr> {
+        Ok(())
     }
 }
 
@@ -42,4 +41,5 @@ enum FilePath {
     CreateTime,
     UpdateTime,
     FolderName,
+    FileType,
 }

@@ -6,7 +6,7 @@ use tokio::fs;
 
 use lib_entity::file_path;
 use lib_entity::file_path::{Entity as FilePath, Model};
-use lib_utils::file::VIDEO_DIR;
+use lib_utils::file::{INIT_DIR, VIDEO_DIR};
 use lib_utils::result::http_result::HttpResult;
 
 use crate::AppState;
@@ -25,6 +25,7 @@ pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Mo
         (&state.connection)
             .await {
             // 检查首页文件夹的内容
+            check_path_file(format!("{}", INIT_DIR.to_owned() + "/"), &data).await;
 
             return Json(HttpResult::ok(data));
         }
@@ -33,18 +34,23 @@ pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Mo
 }
 
 //检查对应路径下的文件夹内容
-async fn check_path_file(path: String) {
+async fn check_path_file(path: String,data: &Vec<Model>) {
     let mut dir = fs::read_dir(path).await.unwrap();
+
+    let path_vec:Vec<String> = data.into_iter().map(|x| x.folder_name.clone()).collect();
+
     while let Some(entity) = dir.next_entry().await.unwrap() {
         let path_file_name:String = entity.path().into_os_string().to_string_lossy().to_string();
 
-        let metadata = entity.metadata().await.unwrap();
-        if metadata.is_file() {
+        if !path_vec.contains(&path_file_name) {
+            let metadata = entity.metadata().await.unwrap();
+            if metadata.is_file() {
 
-        }else if metadata.is_dir() {
+            }else if metadata.is_dir() {
 
-        }else {
+            }else {
 
+            }
         }
     }
 }
