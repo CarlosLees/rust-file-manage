@@ -40,14 +40,13 @@ pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Mo
 async fn check_path_file(path: String, data: &Vec<Model>, parent_id: i32, connection: &DatabaseConnection) {
     let mut dir = fs::read_dir(path).await.unwrap();
 
+
     let path_vec:Vec<String> = data.into_iter().map(|x| x.folder_name.clone()).collect();
 
     let mut insert_vec = vec![];
     while let Some(entity) = dir.next_entry().await.unwrap() {
         let path_file_name:String = entity.path().into_os_string().to_string_lossy().to_string();
         let last = path_file_name.split("/").last().unwrap();
-
-        println!("{:?}",last);
 
         if !path_vec.contains(&last.to_string()) {
             let metadata = entity.metadata().await.unwrap();
