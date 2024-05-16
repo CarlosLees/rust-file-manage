@@ -9,9 +9,8 @@ impl MigrationTrait for Migration {
         let db = manager.get_connection();
 
         if !manager.has_column("file_path", "file_type").await? {
-            db.execute_unprepared(
-                "ALTER TABLE file_path ADD COLUMN file_type int"
-            ).await?;
+            db.execute_unprepared("ALTER TABLE file_path ADD COLUMN file_type int")
+                .await?;
         }
         Ok(())
     }

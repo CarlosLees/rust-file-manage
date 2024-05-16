@@ -1,19 +1,19 @@
+mod file_path;
 mod media;
 mod system_info;
-mod file_path;
 
+use crate::file_path::file_path_router::file_path_router;
 use crate::media::media_router::media_router;
 use crate::system_info::system_info_router::system_info_router;
 use axum::Router;
 use dotenv::dotenv;
+use lib_core::middleware::middleware::check_hello_world;
 use lib_utils::file::dir::check_and_init_dir;
 use migration::{Migrator, MigratorTrait};
 use sea_orm::{Database, DatabaseConnection};
 use std::env;
 use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
-use lib_core::middleware::middleware::check_hello_world;
-use crate::file_path::file_path_router::file_path_router;
 
 const SERVER_PORT: &'static str = "0.0.0.0:8888";
 

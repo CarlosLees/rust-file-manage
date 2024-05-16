@@ -1,11 +1,11 @@
 use crate::file::{AUDIO_DIR, DOC_DIR, IMAGE_DIR, INIT_DIR, VIDEO_DIR};
 use anyhow::{anyhow, Result};
-use std::path::Path;
 use chrono::Local;
+use lib_entity::file_path;
 use sea_orm::{ActiveModelTrait, ActiveValue, DatabaseConnection, EntityTrait};
+use std::path::Path;
 use tokio::fs::{create_dir, metadata};
 use tracing::{error, info};
-use lib_entity::file_path;
 
 pub async fn check_and_init_dir(connection: &DatabaseConnection) -> Result<()> {
     //获取初始文件夹路径
@@ -42,16 +42,18 @@ pub async fn check_and_init_dir(connection: &DatabaseConnection) -> Result<()> {
             create_time: ActiveValue::Set(Local::now().naive_local()),
             update_time: ActiveValue::Set(Local::now().naive_local()),
             folder_name: ActiveValue::Set(String::from("file-manage")),
-            file_type: ActiveValue::Set(0)
+            file_type: ActiveValue::Set(0),
         };
-        if let Ok(modal) = file_path::Entity::insert(default_path).exec(connection)
-            .await {
+        if let Ok(modal) = file_path::Entity::insert(default_path)
+            .exec(connection)
+            .await
+        {
             let insert_id = modal.last_insert_id;
             // 添加初始子文件夹
-            insert_default_data(connection,String::from("video"),insert_id).await?;
-            insert_default_data(connection,String::from("image"),insert_id).await?;
-            insert_default_data(connection,String::from("audio"),insert_id).await?;
-            insert_default_data(connection,String::from("doc"),insert_id).await?;
+            insert_default_data(connection, String::from("video"), insert_id).await?;
+            insert_default_data(connection, String::from("image"), insert_id).await?;
+            insert_default_data(connection, String::from("audio"), insert_id).await?;
+            insert_default_data(connection, String::from("doc"), insert_id).await?;
         }
     } else {
         info!("初始文件夹已存在");
@@ -59,15 +61,18 @@ pub async fn check_and_init_dir(connection: &DatabaseConnection) -> Result<()> {
     Ok(())
 }
 
-async fn insert_default_data(connection: &DatabaseConnection,folder_name: String, parent_id: i32)
-    -> Result<()> {
+async fn insert_default_data(
+    connection: &DatabaseConnection,
+    folder_name: String,
+    parent_id: i32,
+) -> Result<()> {
     let doc = file_path::ActiveModel {
         id: ActiveValue::NotSet,
         parent_id: ActiveValue::Set(Some(parent_id)),
         create_time: ActiveValue::Set(Local::now().naive_local()),
         update_time: ActiveValue::Set(Local::now().naive_local()),
         folder_name: ActiveValue::Set(folder_name),
-        file_type: ActiveValue::Set(0)
+        file_type: ActiveValue::Set(0),
     };
     doc.insert(connection).await?;
     Ok(())

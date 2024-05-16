@@ -30,7 +30,7 @@ impl<T> Default for HttpResult<T> {
         HttpResult {
             code: 200,
             msg: Some("成功".into()),
-            data: None
+            data: None,
         }
     }
 }

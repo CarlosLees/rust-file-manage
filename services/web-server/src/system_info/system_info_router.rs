@@ -1,4 +1,4 @@
-use crate::system_info::system_info_service::{system_hardware_info, system_device_info};
+use crate::system_info::system_info_service::{system_device_info, system_hardware_info};
 use axum::routing::get;
 use axum::Router;
 
