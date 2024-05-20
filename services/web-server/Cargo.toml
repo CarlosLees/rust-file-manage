@@ -35,3 +35,4 @@ dotenv = "0.15.0"
 # -- orm
 sea-orm = { version = "0.12.15", features = ["sqlx-mysql","runtime-tokio-rustls"] }
 chrono = "0.4.38"
+urlencoding = "2.1.3"

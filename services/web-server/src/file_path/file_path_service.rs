@@ -5,6 +5,7 @@ use chrono::Local;
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 use sea_orm::ActiveValue::{NotSet, Set};
 use tokio::fs;
+use urlencoding::decode;
 
 use lib_entity::file_path;
 use lib_entity::file_path::{Entity as FilePath, Model};
@@ -66,7 +67,8 @@ async fn check_path_file(
     parent_id: i32,
     connection: &DatabaseConnection,
 ) {
-    let mut dir = fs::read_dir(path).await.unwrap();
+    println!("{:?}",decode(path.as_str()).unwrap().to_string());
+    let mut dir = fs::read_dir(decode(path.as_str()).unwrap().to_string()).await.unwrap();
     let path_vec: Vec<String> = data.into_iter().map(|x| x.folder_name.clone()).collect();
 
     let mut insert_vec = vec![];
