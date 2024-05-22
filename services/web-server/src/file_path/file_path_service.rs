@@ -14,6 +14,7 @@ use lib_utils::result::http_result::HttpResult;
 
 use crate::AppState;
 use crate::file_path::file_path_params::CurrentPathParams;
+use crate::file_path::file_path_response::{CurrentPathFoldersResponse};
 
 // 获取首页全部文件夹
 pub async fn home_page_folders(state: State<AppState>) -> Json<HttpResult<Vec<Model>>> {
@@ -53,9 +54,9 @@ pub async fn current_path_folder(
         .await
     {
         // 检查文件内容
-        check_path_file(format!("{}",INIT_DIR.to_owned() + "/" + params.intact_path.as_str())
-        ,&data,params.parent_id,&state.connection).await;
-        return Json(HttpResult::ok(data));
+        // check_path_file(format!("{}",INIT_DIR.to_owned() + "/" + params.intact_path.as_str())
+        // ,&data,params.parent_id,&state.connection).await;
+        return Json(HttpResult::ok(CurrentPathFoldersResponse::new(data,params.intact_path)));
     }
     Json(HttpResult::default())
 }
